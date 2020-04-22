@@ -28,7 +28,7 @@ function getAction() {
             {
                 type: "list",
                 message: "what would you like to do?",
-                choices: ["add employee", "add role", "add department", "view emloyees", "view departments", "view roles", "quit the app", " "],
+                choices: ["add employee", "add role", "add department", "view emloyees", "view departments", "view roles", "update employee roles", "quit the app", " "],
                 default: ["add employee"],
                 name: "action"
             }
@@ -56,13 +56,15 @@ function getAction() {
                 case "quit the app":
                     appQuit();
                     break;
+                case "update employee roles":
+                    updateRole();
+                    break;
                 case " ":
                     appQuit();
                     break;
             }
         });
 }
-
 function getEmployees() {
     console.log("\n");
     console.log(" ---- employees ----");
@@ -149,62 +151,46 @@ function addDepartment() {
 }
 
 function addRole() {
-    // var deptNames = [{name:"dog"}, {name: "chicken"}, {name: "cat"}, {name: "pig"}];
-    // console.log(deptNames);
-    deptName = [];
-    var deptName = ['dog', 'chicken', 'cat'];
     var deptNames = [];
-
-    dbConn.query("SELECT name FROM department", function (err, res) {
-        for (let i = 0; i < res.length; i++) {
-            deptNames.push(res[i].name);
-        }
-        if (err) throw err;
-
-        console.log(deptNames);
-        console.log(deptName);
-    });
-
-
-    // inquirer
-    //     .prompt([
-    //         {
-    //             type: "list",
-    //             message: "please enter your departement.",
-    //             choices: deptName,
-    //             name: "newRole"
-    //         },
-    //         {
-    //             type: "input",
-    //             message: "what is the salary for this role?",
-    //             name: "salary"
-    //         },
-    //         {
-    //             type: "list",
-    //             message: "add another Role?\n\n",
-    //             choices: ["yes", "no, I'm done."],
-    //             default: "yes",
-    //             name: "another"
-    //         }
-    //     ])
-    //     .then(res => {
-    //         dbConn.query(
-    //             "INSERT INTO role SET ?",
-    //             {
-    //                 title: res.newRole,
-    //                 salary: res.salary
-    //             },
-    //             function (err) {
-    //                 if (err) throw err;
-    //                 console.log("Your new role was added.");
-    //             }
-    //         );
-    //         if (res.another === "yes") {
-    //             addRole();
-    //         } else {
-    getAction();
-    //         }
-    //     });
+    inquirer
+        .prompt([
+            {
+                type: "input",
+                message: "please enter your departement.",
+                default: "monkey",
+                name: "newRole"
+            },
+            {
+                type: "input",
+                message: "what is the salary for this role?",
+                name: "salary"
+            },
+            {
+                type: "list",
+                message: "add another Role?\n\n",
+                choices: ["yes", "no, I'm done."],
+                default: "yes",
+                name: "another"
+            }
+        ])
+        .then(res => {
+            dbConn.query(
+                "INSERT INTO role SET ?",
+                {
+                    title: res.newRole,
+                    salary: res.salary
+                },
+                function (err) {
+                    if (err) throw err;
+                    console.log("Your new role was added.");
+                }
+            );
+            if (res.another === "yes") {
+                addRole();
+            } else {
+                getAction();
+            }
+        });
 }
 
 function addEmployee() {
@@ -259,6 +245,62 @@ function addEmployee() {
                 getAction();
             }
         });
+}
+
+function updateRole() {
+    console.log("\n");
+    console.log(" ---- roles ----");
+    dbConn.query("SELECT * FROM role", function (err, res) {
+        if (err) throw err;
+        // Log all results of the SELECT statement
+        console.table(res);
+
+        inquirer
+            .prompt([
+                {
+                    type: "input",
+                    message: "enter an ID to modify a Role.",
+                    name: "roleID"
+                },
+                {
+                    type: "input",
+                    message: "modify title?\n(leave blank for no modification)",
+                    name: "title"
+                },
+                {
+                    type: "input",
+                    message: "modify salary?\n(leave blank for no modification)",
+                    name: "salary"
+                },
+                {
+                    type: "list",
+                    message: "modify another Role?",
+                    choices: ["yes", "no, I'm done."],
+                    default: ["yes"],
+                    name: "another"
+                }
+            ])
+            .then(res => {
+                let updateID = parseInt(res.roleID);
+                console.log(updateID);
+                console.log(res.title);
+                let updateSalary = parseInt(res.salary);
+                console.log(updateSalary);
+                dbConn.query(
+                    "UPDATE role SET title = res.title, salary = updateSalary WHERE id = updateID",
+                    function (err) {
+                        if (err) throw err;
+                        console.log("updates successfull!");
+
+                    }
+                );
+                if (res.another === "yes") {
+                    updateRole();
+                } else {
+                    getAction();
+                }
+            });
+    });
 }
 
 function appQuit() {

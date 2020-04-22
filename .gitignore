@@ -39,3 +39,4 @@ Thumbs.db
 # files #
 ######################
 index*
+node_modules
