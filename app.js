@@ -99,24 +99,6 @@ function getDepartments() {
     });
 }
 
-// function getOwners() {
-// function countOwners() {
-//     dbConn.query("SELECT COUNT(*) FROM employee WHERE role_id = 1", function (err, res) {
-//         if (err) throw err;
-//         console.log(" ---- owners ----");
-//         console.table(res);
-//     });
-// }
-// countOwners();
-// dbConn.query("SELECT * FROM employee WHERE role_id = 1", function (err, res) {
-//     if (err) throw err;
-//     // Log all results of the SELECT statement
-//     console.log(" ---- owners ----");
-//     console.table(res);
-//     getEmployees();
-// });
-// }
-
 function addDepartment() {
     inquirer
         .prompt([
@@ -264,11 +246,6 @@ function updateRole() {
                 },
                 {
                     type: "input",
-                    message: "modify title?\n(leave blank for no modification)",
-                    name: "title"
-                },
-                {
-                    type: "input",
                     message: "modify salary?\n(leave blank for no modification)",
                     name: "salary"
                 },
@@ -281,19 +258,20 @@ function updateRole() {
                 }
             ])
             .then(res => {
+                function doUpdate() {
+                    dbConn.query(
+                        // `UPDATE role SET title = ${res.title} WHERE id = ${updateID}`,
+                        `UPDATE role SET salary =  ${res.salary} WHERE id = ${updateID}`,
+                        function (err) {
+                            if (err) throw err;
+                            console.log("updates successfull!");
+                        }
+                    );
+                }
                 let updateID = parseInt(res.roleID);
-                console.log(updateID);
-                console.log(res.title);
-                let updateSalary = parseInt(res.salary);
-                console.log(updateSalary);
-                dbConn.query(
-                    "UPDATE role SET title = res.title, salary = updateSalary WHERE id = updateID",
-                    function (err) {
-                        if (err) throw err;
-                        console.log("updates successfull!");
-
-                    }
-                );
+                // console.log(updateID);
+                // console.log(res.title);
+                doUpdate();
                 if (res.another === "yes") {
                     updateRole();
                 } else {
