@@ -31,6 +31,3 @@
  
  ![i'm a link](./images/stephon-headshot-garden.jpg)
 
-![Custom badge](https://img.shields.io/endpoint?color=blue&label=Stephon%20Autery&logo=lets%20begin%20here%20...&logoColor=yellow&url=https%3A%2F%2Fgithub.com%2FStephonAutery%2FStephon_Autery-Employee-Tracker)
-
-
