@@ -3,7 +3,7 @@
  ## description 
  user is able to view and manage the departments, roles, and employees in a company to facilitate organization and management.
 
- ## contents 
+ ## dependencies 
   
  - JavaScript 
  - Node.JS
@@ -23,20 +23,12 @@ npm i Express, Node.js, MySQL, Inquirer, Console.Table - adds dependencies and p
 
 For those who wish to clone or fork this repo, the following steps should be followed:
 
- dependencies: 
- - path 
- - fs 
- - express
- - mysql
- - console.table
- - inquirer
-
  ## how will the app be used? 
   
- The application writes, saves, and deletes notes. This application will use an express backend and save and retrieve note data from a JSON file.  
+The application is a solution for managing a company's employees using node, inquirer, and MySQL. 
 
  ## GitHub repository 
- [note-taker on GitHub](https://github.com/StephonAutery/Stephon_Autery-Employee-Tracker) 
+ [employee manager - on GitHub](https://github.com/StephonAutery/Stephon_Autery-Employee-Tracker) 
 
  ## contributors 
  [Stephon Autery on GitHub](https://github.com/StephonAutery)
